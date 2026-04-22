@@ -39,7 +39,6 @@ window.addEventListener('scroll', () => {
 
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
         const headerHeight = document.querySelector('header').offsetHeight;
         
         if (pageYOffset >= (sectionTop - headerHeight - 100)) {
@@ -56,7 +55,6 @@ window.addEventListener('scroll', () => {
 });
 
 const contactForm = document.querySelector('.contact-form');
-
 if (contactForm) {
     contactForm.addEventListener('submit', function(event) {
         event.preventDefault(); 
@@ -64,3 +62,21 @@ if (contactForm) {
         contactForm.reset();
     });
 }
+
+const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.15 
+};
+
+const fadeObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('show-element');
+            observer.unobserve(entry.target); 
+        }
+    });
+}, observerOptions);
+
+const hiddenElements = document.querySelectorAll('.hidden-element');
+hiddenElements.forEach((el) => fadeObserver.observe(el));
